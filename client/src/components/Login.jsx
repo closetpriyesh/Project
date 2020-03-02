@@ -17,11 +17,11 @@ handleClick(event) {
    event.preventDefault();
  }
 
- componentDidMount() {
-    fetch('/Posts')
-      .then(res => res.json())
-      .then(customers => this.setState({customers}, () => console.log('Customers fetched...', customers)));
-  }
+ // componentDidMount() {
+ //    fetch('/Posts')
+ //      .then(res => res.json())
+ //      .then(customers => this.setState({customers}, () => console.log('Customers fetched...', customers)));
+ //  }
 
 render() {
   return (

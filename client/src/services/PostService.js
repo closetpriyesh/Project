@@ -1,4 +1,4 @@
-import Configuration from './Configuration';
+import Configuration from '../configuration/Configuration';
 
 class PostService {
 
@@ -18,7 +18,7 @@ class PostService {
         console.log("Retrieved posts:");
         console.log(json);
         const posts = [];
-        const postArray = json._embedded.collectionPosts;
+        const postArray = json._embedded.collectionItems;
         for(var i = 0; i < postArray.length; i++) {
           postArray[i]["link"] =  postArray[i]._links.self.href;
           posts.push(postArray[i]);
@@ -33,7 +33,9 @@ class PostService {
   async getPost(postLink) {
     console.log("PostService.getPost():");
     console.log("Post: " + postLink);
-    return fetch(postLink)
+    return fetch(postLink,{    method: "GET",mode:"no-cors",headers: {
+          "Content-Type": "application/json"
+      }})
       .then(response => {
         if (!response.ok) {
             this.handleResponseError(response);
@@ -50,16 +52,16 @@ class PostService {
       });
   }
 
-  async createPost(newpost) {
+  async createPost(newPost) {
     console.log("PostService.createPost():");
-    console.log(newpost);
+    console.log(newPost);
     return fetch(this.config.POST_COLLECTION_URL, {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       headers: {
             "Content-Type": "application/json"
         },
-      body: JSON.stringify(newpost)
+      body: JSON.stringify(newPost)
     })
       .then(response => {
         if (!response.ok) {

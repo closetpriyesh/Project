@@ -37,6 +37,8 @@ function CreatePost(props) {
     });
   }
 
+
+
   return (
     <div>
       <form className="create-post">
