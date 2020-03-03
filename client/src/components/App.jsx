@@ -1,4 +1,4 @@
-import React, { Component ,useState} from "react";
+import React, { Component ,useState, useEffect} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import CreatePost from "./CreatePost";
@@ -13,6 +13,9 @@ function App() {
 
   const [posts, setPosts] = useState([]);
 const postService = new PostService();
+  useEffect(() => {
+      getPosts()}, []
+    );
 
 
   // function addPost(newPost) {
@@ -22,8 +25,13 @@ const postService = new PostService();
   // }
 
   function deletePost(id) {
+
+    postService.deletePost(id).then(res => {
+    getPosts();
+    });
+
     setPosts(prevPosts => {
-      return prevPosts.filter((noteItem, index) => {
+      return prevPosts.filter((postItem, index) => {
         return index !== id;
       });
     });
@@ -64,6 +72,17 @@ function getPosts() {
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
+            {posts.map((postItem, index) => {
+      return (
+        <Post
+          key={index}
+          id={index}
+          title={postItem.title}
+          content={postItem.content}
+          onDelete={deletePost}
+        />
+      );
+    })}
     <Footer />
           </Route>
             <Route path="/">

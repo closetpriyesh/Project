@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 
@@ -11,7 +12,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(cors({origin: 'http://localhost:3000'}))
 
 mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true , useUnifiedTopology:  true});
 
@@ -24,7 +28,7 @@ const Post = mongoose.model("Post", postSchema);
 
 ///////////////////////////////////Requests Targetting all Posts////////////////////////
 
-app.route("/Posts")
+app.route("/posts")
 
 .get(function(req, res){
   Post.find(function(err, foundPosts){
@@ -38,14 +42,18 @@ app.route("/Posts")
 
 .post(function(req, res){
 
+console.log(req.body);
+console.log("title: "+req.body.title);
+console.log("content: "+req.body.content);
   const newPost = new Post({
     title: req.body.title,
     content: req.body.content
   });
 
-  newPost.save(function(err){
+newPost.save(function(err, doc){
     if (!err){
-      res.send("Successfully added a new Post.");
+      res.send("Successfully added a new Post."+ doc);
+
     } else {
       res.send(err);
     }
@@ -65,7 +73,7 @@ app.route("/Posts")
 
 ////////////////////////////////Requests Targetting A Specific Post////////////////////////
 
-app.route("/Posts/:PostTitle")
+app.route("/posts/:postId")
 
 .get(function(req, res){
 
@@ -108,9 +116,9 @@ app.route("/Posts/:PostTitle")
 })
 
 .delete(function(req, res){
-
+console.log("id:"+req.body.id);
   Post.deleteOne(
-    {title: req.params.PostTitle},
+    {id: req.body.id},
     function(err){
       if (!err){
         res.send("Successfully deleted the corresponding post.");

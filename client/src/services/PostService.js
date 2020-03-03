@@ -7,7 +7,9 @@ class PostService {
   }
 
   async retrievePosts() {
-    return fetch(this.config.POST_COLLECTION_URL)
+    return fetch(this.config.POST_COLLECTION_URL,{ method: "GET", headers: {
+          "Content-Type": "application/json",
+      }})
       .then(response => {
         if (!response.ok) {
             this.handleResponseError(response);
@@ -17,12 +19,7 @@ class PostService {
       .then(json => {
         console.log("Retrieved posts:");
         console.log(json);
-        const posts = [];
-        const postArray = json._embedded.collectionItems;
-        for(var i = 0; i < postArray.length; i++) {
-          postArray[i]["link"] =  postArray[i]._links.self.href;
-          posts.push(postArray[i]);
-        }
+        const posts = json;
         return posts;
       })
       .catch(error => {
@@ -33,8 +30,8 @@ class PostService {
   async getPost(postLink) {
     console.log("PostService.getPost():");
     console.log("Post: " + postLink);
-    return fetch(postLink,{    method: "GET",mode:"no-cors",headers: {
-          "Content-Type": "application/json"
+    return fetch(postLink,{ method: "GET",mode:"no-cors",headers: {
+          "Content-Type": "application/json",
       }})
       .then(response => {
         if (!response.ok) {
@@ -54,32 +51,35 @@ class PostService {
 
   async createPost(newPost) {
     console.log("PostService.createPost():");
-    console.log(newPost);
-    return fetch(this.config.POST_COLLECTION_URL, {
+    console.log(JSON.stringify(newPost));
+    return fetch(this.config.POST_COLLECTION_URL,  {
       method: "POST",
-      mode: "no-cors",
+      mode: "cors",
       headers: {
             "Content-Type": "application/json"
         },
       body: JSON.stringify(newPost)
     })
       .then(response => {
+        console.log(response);
         if (!response.ok) {
             this.handleResponseError(response);
         }
-        return response.json();
+        console.log("Happy");
+        // return response.json();
       })
       .catch(error => {
         this.handleError(error);
       });
   }
 
-  async deletePost(postlink) {
+  async deletePost(id) {
     console.log("PostService.deletePost():");
-    console.log("post: " + postlink);
-    return fetch(postlink, {
+    console.log(id);
+    return fetch(this.config.POST_URL + id ,{
       method: "DELETE",
-      mode: "cors"
+      mode: "cors",
+      body: JSON.stringify({id: id})
     })
       .then(response => {
         if (!response.ok) {
