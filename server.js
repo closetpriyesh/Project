@@ -73,7 +73,7 @@ newPost.save(function(err, doc){
 
 ////////////////////////////////Requests Targetting A Specific Post////////////////////////
 
-app.route("/posts/:postId")
+app.route("/posts/:id")
 
 .get(function(req, res){
 
@@ -116,9 +116,9 @@ app.route("/posts/:postId")
 })
 
 .delete(function(req, res){
-console.log("id:"+req.body.id);
+console.log("id:"+req.params.id);
   Post.deleteOne(
-    {id: req.body.id},
+    {_id: req.params.id},
     function(err){
       if (!err){
         res.send("Successfully deleted the corresponding post.");

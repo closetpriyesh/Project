@@ -75,12 +75,12 @@ class PostService {
 
   async deletePost(id) {
     console.log("PostService.deletePost():");
-    console.log(id);
-    return fetch(this.config.POST_URL + id ,{
-      method: "DELETE",
-      mode: "cors",
-      body: JSON.stringify({id: id})
-    })
+    this.ID = {"ID": 5};
+
+    const formData = new FormData();
+    formData.append('first_name', "Asdfsdfa");
+    console.log(this.config.POST_URL+ id);
+    return fetch(this.config.POST_URL + id, {method: "DELETE"})
       .then(response => {
         if (!response.ok) {
             this.handleResponseError(response);

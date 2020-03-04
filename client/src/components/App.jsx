@@ -8,7 +8,7 @@ import { Router, Switch, Route, Link } from "react-router-dom";
 import PostService from '../services/PostService'
 import history from "../history";
 import About from './About';
-
+import Modal from './Modal';
 function App() {
 
   const [posts, setPosts] = useState([]);
@@ -23,6 +23,21 @@ const postService = new PostService();
   //     return [...prevPosts, newPost];
   //   });
   // }
+
+
+  function updatePost(id) {
+
+    // postService.updatePost(id).then(res => {
+    // getPosts();
+    // });
+    //
+    // setPosts(prevPosts => {
+    //   return prevPosts.filter((postItem, index) => {
+    //     return index !== id;
+    //   });
+    // });
+  }
+
 
   function deletePost(id) {
 
@@ -72,13 +87,15 @@ function getPosts() {
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
+              <Modal />
             {posts.map((postItem, index) => {
       return (
         <Post
           key={index}
-          id={index}
+          id={postItem._id}
           title={postItem.title}
           content={postItem.content}
+          onUpdate={updatePost}
           onDelete={deletePost}
         />
       );

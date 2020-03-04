@@ -6,6 +6,8 @@
   "dependencies": {
     "@material-ui/core": "4.9.0",
     "@material-ui/icons": "4.5.1",
+    "mdbootstrap": "^4.14.0",
+    "mdbreact": "^4.25.3",
     "qs": "6.9.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -18,7 +20,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-"proxy":  "http://localhost:5000/Posts",
+  "proxy": "http://localhost:5000/Posts",
   "browserslist": {
     "production": [
       ">0.2%",
