@@ -25,22 +25,14 @@ const postService = new PostService();
   // }
 
 
-  function updatePost(id) {
-
-    // postService.updatePost(id).then(res => {
-    // getPosts();
-    // });
-    //
-    // setPosts(prevPosts => {
-    //   return prevPosts.filter((postItem, index) => {
-    //     return index !== id;
-    //   });
-    // });
+  function updatePost(post) {
+    postService.updatePost(post).then(res => {
+    getPosts();
+    });
   }
 
 
   function deletePost(id) {
-
     postService.deletePost(id).then(res => {
     getPosts();
     });
@@ -87,7 +79,6 @@ function getPosts() {
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
-              <Modal />
             {posts.map((postItem, index) => {
       return (
         <Post

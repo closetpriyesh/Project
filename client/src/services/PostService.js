@@ -93,8 +93,9 @@ class PostService {
 
   async updatePost(post) {
     console.log("PostService.updatePost():");
-    console.log(post);
-    return fetch(post.link, {
+        console.log(JSON.stringify(post));
+        console.log(this.config.POST_URL + post.id);
+    return fetch(this.config.POST_URL + post.id, {
       method: "PUT",
       mode: "cors",
       headers: {

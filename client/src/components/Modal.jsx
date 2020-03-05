@@ -1,37 +1,77 @@
 
-import React, { Component } from "react";
+import React, { Component, useState,useEffect } from "react";
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
-function Modal() {
+function Modal(props) {
+  const [post, setPost] = useState({
+    title: props.title,
+    content: props.content
+  });
+
+  useEffect(() => {
+    document.getElementById("title").addEventListener('input', handler);
+    document.getElementById("content").addEventListener('input', handler);
+    return () => {
+       document.getElementById("title").removeEventListener('input', handler);
+       document.getElementById("content").removeEventListener('input', handler);
+    }
+}, []);
+
+function handler(event) {
+  console.log("input");
+  const  {id,innerText} =event.target;
+console.log("change");
+  setPost(prevPost => {
+    return {
+      ...prevPost,
+      [id]: innerText
+    };
+  });
+}
+
+
+  function submitPost() {
+    console.log(post.title);
+    console.log(post.content);
+    props.updatePost({
+      id:props.id,
+      title: post.title,
+      content: post.content
+    });
+}
+
+
+
+
 return (
   <div>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCart">Launch modal</button>
-<div className="modal fade" id="modalPush" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div className="modal-dialog modal-notify modal-info" role="document">
 
-    <div className="modal-content text-center">
+<div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div className="modal-dialog modal-dialog-centered" role="document">
+    <div className="modal-content">
 
-      <div className="modal-header d-flex justify-content-center">
-        <p className="heading">Be always up to date</p>
+      <div className="modal-header" >
+
+        <h5 id="title" className="modal-title" contentEditable="true" suppressContentEditableWarning="transparenttextures"
+          value={post.title} >{props.title}</h5>
+
+
       </div>
       <div className="modal-body">
-
-        <i className="fas fa-bell fa-4x animated rotateIn mb-4"></i>
-
-        <p>Do you want to receive the push notification about the newest posts?</p>
-
+      <p id="content" contentEditable="true" suppressContentEditableWarning="transparenttextures"
+        value={post.content} >  {props.content} </p>
       </div>
 
-
-      <div className="modal-footer flex-center">
-        <a href="https://mdbootstrap.com/products/jquery-ui-kit/" className="btn btn-info">Yes</a>
-        <a type="button" className="btn btn-outline-info waves-effect" data-dismiss="modal">No</a>
+      <div className="modal-footer">
+    <button type="button"  data-dismiss="modal"><CancelIcon /></button>
+        <button type="button" data-dismiss="modal" onClick={submitPost}><SaveIcon/></button>
       </div>
     </div>
-
   </div>
 </div>
-</div>);
+</div>
+);
 }
 
 export default Modal;

@@ -87,14 +87,20 @@ app.route("/posts/:id")
 })
 
 .put(function(req, res){
-
-  Post.update(
-    {title: req.params.PostTitle},
+console.log("update post");
+console.log(req.params.id);
+console.log(req.body.title);
+console.log(req.body.content);
+  Post.updateOne(
+    {_id: req.params.id},
     {title: req.body.title, content: req.body.content},
-    {overwrite: true},
     function(err){
       if(!err){
+        console.log("Successfully updated the selected Post");
         res.send("Successfully updated the selected Post.");
+      }
+      else {
+        console.log(err);
       }
     }
   );
@@ -103,7 +109,7 @@ app.route("/posts/:id")
 .patch(function(req, res){
 
   Post.update(
-    {title: req.params.PostTitle},
+    {title: req.params.id},
     {$set: req.body},
     function(err){
       if(!err){
