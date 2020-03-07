@@ -1,5 +1,5 @@
 
-import React, { Component, useState,useEffect } from "react";
+import React, {useState,useEffect } from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 
@@ -10,18 +10,14 @@ function Modal(props) {
   });
 
   useEffect(() => {
-    document.getElementById("title").addEventListener('input', handler);
-    document.getElementById("content").addEventListener('input', handler);
+    document.getElementById("p"+props.id).addEventListener('input', handler);
     return () => {
-       document.getElementById("title").removeEventListener('input', handler);
-       document.getElementById("content").removeEventListener('input', handler);
+       document.getElementById("p"+props.id).removeEventListener('input', handler);
     }
 }, []);
 
 function handler(event) {
-  console.log("input");
   const  {id,innerText} =event.target;
-console.log("change");
   setPost(prevPost => {
     return {
       ...prevPost,
@@ -42,12 +38,9 @@ console.log("change");
 }
 
 
-
-
 return (
   <div>
-
-<div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div className="modal fade" id={"p"+props.id} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered" role="document">
     <div className="modal-content">
 
@@ -55,8 +48,6 @@ return (
 
         <h5 id="title" className="modal-title" contentEditable="true" suppressContentEditableWarning="transparenttextures"
           value={post.title} >{props.title}</h5>
-
-
       </div>
       <div className="modal-body">
       <p id="content" contentEditable="true" suppressContentEditableWarning="transparenttextures"
@@ -64,7 +55,7 @@ return (
       </div>
 
       <div className="modal-footer">
-    <button type="button"  data-dismiss="modal"><CancelIcon /></button>
+        <button type="button"  data-dismiss="modal"><CancelIcon /></button>
         <button type="button" data-dismiss="modal" onClick={submitPost}><SaveIcon/></button>
       </div>
     </div>

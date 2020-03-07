@@ -1,8 +1,7 @@
-import React,{Component} from "react";
+import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import CreatePost from "./CreatePost";
-import Post from "./Post";
 function About(props) {
 
 // function onCreatePost() {

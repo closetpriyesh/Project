@@ -1,23 +1,13 @@
-import React, {useState,useEffect} from "react";
+import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from '@material-ui/icons/Edit';
-import Modal from './Modal';
-function Post(props) {
 
-  const [showComponent, setShowComponent] = useState(false);
-  useEffect(() => {
-      setShowComponent(true)}, []
-    );
+function Post(props) {
 
   function handleDelete() {
     props.onDelete(props.id);
   }
 
-
-
-  function handleUpdate(post) {
-      props.onUpdate(post);
-  }
 
   return (
     <div className="post">
@@ -26,10 +16,11 @@ function Post(props) {
       <button onClick={handleDelete}>
         <DeleteIcon />
       </button>
-      <button  data-toggle="modal" data-target="#exampleModalCenter">
+      <button  data-toggle="modal" data-target={"#p"+props.id}>
       <EditIcon />
       </button>
-      {showComponent && <Modal id= {props.id} title={props.title} content={props.content} updatePost={handleUpdate}/>}
+      {console.log(props.id)}
+
     </div>
   );
 }

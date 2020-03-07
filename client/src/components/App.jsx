@@ -1,13 +1,12 @@
-import React, { Component ,useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
 import Login from "./Login";
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import PostService from '../services/PostService'
 import history from "../history";
-import About from './About';
 import Modal from './Modal';
 function App() {
 
@@ -26,6 +25,7 @@ const postService = new PostService();
 
 
   function updatePost(post) {
+    console.log(post);
     postService.updatePost(post).then(res => {
     getPosts();
     });
@@ -79,6 +79,12 @@ function getPosts() {
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
+
+                {posts.map((postItem, index) => {
+              return (
+              <Modal key= {index} id={postItem._id} title={postItem.title} content={postItem.content} updatePost={updatePost}/>
+            );})}
+
             {posts.map((postItem, index) => {
       return (
         <Post
@@ -91,6 +97,10 @@ function getPosts() {
         />
       );
     })}
+
+
+
+
     <Footer />
           </Route>
             <Route path="/">
