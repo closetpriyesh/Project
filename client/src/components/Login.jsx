@@ -9,13 +9,21 @@ class Login extends Component {
   this.state = {
     customers: []
   };
-  this.handleClick = this.handleClick.bind(this);
+    this.signUpClick = this.signUpClick.bind(this);
+  this.signInClick = this.signInClick.bind(this);
+
 }
 
-handleClick(event) {
+signInClick(event) {
    history.push("/about");
    event.preventDefault();
  }
+
+ signUpClick(event) {
+    history.push("/register");
+    event.preventDefault();
+  }
+
 
  // componentDidMount() {
  //    fetch('/Posts')
@@ -36,12 +44,21 @@ render() {
         </div>
         <div className="col-sm-6 right">
           <form className="form">
+
             <Input type="text" placeholder="Username" />
             <Input type="password" placeholder="Password" />
-            <button type="submit" onClick={this.handleClick}>
+            <button type="submit" onClick={this.signInClick}>
               Login
             </button>
+                 <br />
+                 <p className="member">Not a member? <span className="pull-right">
+                 <br />
+                 <button type="submit" className="btn btn-default btn-small signUp" onClick={this.signUpClick}>Sign Up</button></span></p>
+                 <br />
+
+
           </form>
+
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
 import Login from "./Login";
+import Register from './Register';
 import { Router, Switch, Route } from "react-router-dom";
 import PostService from '../services/PostService'
 import history from "../history";
@@ -76,6 +77,15 @@ function getPosts() {
       <Router history={history}>
         <div>
           <Switch>
+
+
+          <Route path="/register">
+          <Header />
+        <Register />
+          <Footer />
+
+          </Route>
+
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
@@ -108,6 +118,7 @@ function getPosts() {
             <Login />
               <Footer />
             </Route>
+
 
           </Switch>
         </div>

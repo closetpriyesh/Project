@@ -1,11 +1,10 @@
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const app = express();
+require('./models/model.js').initialize();
 
 app.set('view engine', 'ejs');
 
@@ -134,6 +133,9 @@ console.log("id:"+req.params.id);
     }
   );
 });
+
+
+
 
 const port = 5000;
 
