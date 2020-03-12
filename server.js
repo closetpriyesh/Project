@@ -18,6 +18,14 @@ app.use(cors({origin: 'http://localhost:3000'}))
 
 mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true , useUnifiedTopology:  true});
 
+
+const userSchema = {
+  userName: String,
+  password: String,
+};
+
+const User = mongoose.model("UserRegistered", userSchema);
+
 const postSchema = {
   title: String,
   content: String
@@ -134,6 +142,50 @@ console.log("id:"+req.params.id);
   );
 });
 
+///////////////////////////////////Requests Targetting all Users////////////////////////
+
+app.route("/users")
+
+.get(function(req, res){
+  User.find(function(err, foundUsers){
+    if (!err) {
+      res.send(foundUsers);
+    } else {
+      res.send(err);
+    }
+  });
+})
+
+.post(function(req, res){
+
+console.log("title: "+req.body.userName);
+console.log("content: "+req.body.password);
+
+  const newUser = new User({
+    userName: req.body.userName,
+    password: req.body.password,
+  });
+
+newUser.save(function(err, doc){
+    if (!err){
+        console.log("success");
+    return  res.send({redirect: "/"});
+    } else {
+      res.send(err);
+    }
+  });
+})
+
+.delete(function(req, res){
+
+  User.deleteMany(function(err){
+    if (!err){
+      res.send("Successfully deleted all Users.");
+    } else {
+      res.send(err);
+    }
+  });
+});
 
 
 

@@ -6,24 +6,18 @@ import Post from "./Post";
 import Login from "./Login";
 import Register from './Register';
 import { Router, Switch, Route } from "react-router-dom";
-import PostService from '../services/PostService'
+import PostService from '../services/PostService';
+import UserService from '../services/UserService';
 import history from "../history";
 import Modal from './Modal';
 function App() {
 
   const [posts, setPosts] = useState([]);
-const postService = new PostService();
+  const postService = new PostService();
+  const userService = new UserService();
   useEffect(() => {
       getPosts()}, []
     );
-
-
-  // function addPost(newPost) {
-  //   setPosts(prevPosts => {
-  //     return [...prevPosts, newPost];
-  //   });
-  // }
-
 
   function updatePost(post) {
     console.log(post);
@@ -31,7 +25,6 @@ const postService = new PostService();
     getPosts();
     });
   }
-
 
   function deletePost(id) {
     postService.deletePost(id).then(res => {
@@ -60,15 +53,10 @@ function getPosts() {
   });
 }
 
-// function  clearState() {
-//     this.setState({
-//       showDetails: false,
-//       selectedItem: null,
-//       editItem: false,
-//       newItem: null
-//     });
-//   }
-
+function  addUser(newUser) {
+// clearState();
+  userService.createUser(newUser);
+}
 
 
 
@@ -77,15 +65,11 @@ function getPosts() {
       <Router history={history}>
         <div>
           <Switch>
-
-
           <Route path="/register">
           <Header />
-        <Register />
+          <Register  onAdd={addUser}/>
           <Footer />
-
           </Route>
-
           <Route path="/about">
           <Header />
             <CreatePost onAdd={addPost} />
@@ -107,19 +91,13 @@ function getPosts() {
         />
       );
     })}
-
-
-
-
     <Footer />
-          </Route>
+            </Route>
             <Route path="/">
             <Header />
             <Login />
-              <Footer />
+            <Footer />
             </Route>
-
-
           </Switch>
         </div>
       </Router>

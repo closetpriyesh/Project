@@ -11,8 +11,9 @@ function CreatePost(props) {
   const [isExpanded, setExpanded] = useState(false);
 
   function handleChange(event) {
-    const { name, value } = event.target;
 
+    const { name, value } = event.target;
+    console.log(name);
     setPost(prevPost => {
       return {
         ...prevPost,

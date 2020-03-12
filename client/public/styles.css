@@ -95,6 +95,7 @@ form input {
 }
 
 form button[type="submit"] {
+  text-align: center;
   appearance: none;
   outline: 0;
   background-color: white;
@@ -102,7 +103,10 @@ form button[type="submit"] {
   padding: 10px 15px;
   color: #50a3a2;
   border-radius: 3px;
+    display: block;
+  margin: 0 auto 10px auto;
   width: 250px;
+    font-weight: 300;
   font-size: 18px;
 }
 
@@ -163,8 +167,6 @@ img {
   outline: none;
 }
 
-
-
 .left {
   background-color: #e1f2fb;
   display: flex;
@@ -188,4 +190,13 @@ img {
 
 .home-image {
   padding: 30% 5%;
+}
+
+.signUpForm {
+  padding: 5%;
+  margin: 5rem;
+  position: relative;
+  background-color: #be9fe1;
+  border: 1px solid rgba(252, 252, 252, 0.4);
+  border-radius: 25px;
 }

@@ -55,10 +55,7 @@ render() {
                  <br />
                  <button type="submit" className="btn btn-default btn-small signUp" onClick={this.signUpClick}>Sign Up</button></span></p>
                  <br />
-
-
           </form>
-
         </div>
       </div>
     </div>
