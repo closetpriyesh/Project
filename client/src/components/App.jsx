@@ -5,7 +5,7 @@ import CreatePost from "./CreatePost";
 import Post from "./Post";
 import Login from "./Login";
 import Register from './Register';
-import { Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route, Redirect} from "react-router-dom";
 import PostService from '../services/PostService';
 import UserService from '../services/UserService';
 import history from "../history";
@@ -56,6 +56,7 @@ function getPosts() {
 function  addUser(newUser) {
 // clearState();
   userService.createUser(newUser);
+
 }
 
 
@@ -68,6 +69,7 @@ function  addUser(newUser) {
           <Route path="/register">
           <Header />
           <Register  onAdd={addUser}/>
+        
           <Footer />
           </Route>
           <Route path="/about">

@@ -27,7 +27,6 @@ console.log(name+' '+value);
  }
 
  function registerUser() {
-   console.log(user.userName);
    if(user.password === user.confirmPassword) {
    props.onAdd({
      userName: user.userName,
@@ -53,6 +52,8 @@ alert("Passwords do not match.");
       <Input type="password" name="confirmPassword" onChange={handleChange} value={user.confirmPassword} placeholder="Confirm Password" />
       <button type="button" onClick={registerUser}>Register</button>
     </form>
+
+
     </div>
   );
 

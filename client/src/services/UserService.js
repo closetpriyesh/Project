@@ -1,12 +1,10 @@
 import Configuration from '../configuration/Configuration';
-
+import history from "../history";
 class UserService {
 
   constructor() {
     this.config = new Configuration();
-    this.state = {
-        fireRedirect: false
-    };
+    this.fireRedirect = false;
   }
 
   async retrieveUsers() {
@@ -17,9 +15,7 @@ class UserService {
         if (!response.ok) {
             this.handleResponseError(response);
         }
-        this.setState({
-       fireRedirect: true
-        });
+
         // return response.json();
 
 
@@ -28,7 +24,6 @@ class UserService {
         console.log("Retrieved users:");
         console.log(json);
         const users = json;
-        {  this.state.fireRedirect && <Redirect to='/' push={true} />;}
         return users;
       })
       .catch(error => {
@@ -58,6 +53,7 @@ class UserService {
       });
   }
 
+
   async createUser(newUser) {
     console.log("UserService.createUser():");
     console.log(JSON.stringify(newUser));
@@ -69,19 +65,20 @@ class UserService {
         },
       body: JSON.stringify(newUser)
     })
-      .then(response => {
+    .then(response => {
         console.log(response);
         if (!response.ok) {
             this.handleResponseError(response);
         }
 
-
+        history.push('/');
         // return response.json();
       })
       .catch(error => {
         this.handleError(error);
       });
   }
+
 
   async deleteUser(id) {
     console.log("UserService.deleteUser():");

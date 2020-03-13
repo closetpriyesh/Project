@@ -1,11 +1,17 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-require('./models/model.js').initialize();
+const passport = require("passport");
+const path = require('path');
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require('mongoose-find-or-create');
 
+require('./models/model.js').initialize();
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({
@@ -13,17 +19,19 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(bodyParser.json());
-app.use(express.static("public"));
+
+
 app.use(cors({origin: 'http://localhost:3000'}))
 
 mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true , useUnifiedTopology:  true});
 
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
   userName: String,
   password: String,
-};
+});
 
+// userSchema.plugin(findOrCreate);
 const User = mongoose.model("UserRegistered", userSchema);
 
 const postSchema = {
@@ -32,6 +40,19 @@ const postSchema = {
 };
 
 const Post = mongoose.model("Post", postSchema);
+
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.CLIENT_ID,
+//     clientSecret: process.env.CLIENT_SECRET,
+//     callbackURL: "http://www.example.com/auth/google/callback",
+//     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+//   },
+//   function(accessToken, refreshToken, profile, cb) {
+//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
+//       return cb(err, user);
+//     });
+//   }
+// ));
 
 ///////////////////////////////////Requests Targetting all Posts////////////////////////
 

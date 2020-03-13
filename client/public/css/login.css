@@ -1,0 +1,14 @@
+.card{
+text-align: center;
+display: block;
+width: 100%;
+}
+
+.card-body{
+  display: inline-block;
+}
+
+
+.row {
+  padding: auto 0;
+}

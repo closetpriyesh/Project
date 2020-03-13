@@ -71,10 +71,11 @@ form.create-post button {
 
 
 form {
-  padding: 5%;
+  padding: 5% 5% 0;
   margin: auto;
   position: relative;
   background-color: #be9fe1;
+  width:320px;
   border: 1px solid rgba(252, 252, 252, 0.4);
   border-radius: 25px;
 }
@@ -86,7 +87,7 @@ form input {
   border-radius: 3px;
   font-family: "Source Sans Pro", sans-serif;
   padding: 10px 15px;
-  margin: 0 auto 10px auto;
+  margin: 10px auto 10px auto;
   display: block;
   text-align: center;
   font-size: 18px;
@@ -178,6 +179,7 @@ img {
 .right {
   background-color: #deddfa;
   display: flex;
+  padding: auto 0;
   flex-flow: column;
   height: 100vh;
   width: 100%;

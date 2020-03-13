@@ -10,8 +10,7 @@ class Login extends Component {
     customers: []
   };
     this.signUpClick = this.signUpClick.bind(this);
-  this.signInClick = this.signInClick.bind(this);
-
+    this.signInClick = this.signInClick.bind(this);
 }
 
 signInClick(event) {
@@ -43,6 +42,22 @@ render() {
           />
         </div>
         <div className="col-sm-6 right">
+
+
+        <div className="row">
+
+          <div className="card">
+            <div className="card-body">
+              <a className="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+                <i className="fab fa-google"></i>
+                Sign In with Google
+              </a>
+            </div>
+          </div>
+      
+        </div>
+
+    <div className="row">
           <form className="form">
 
             <Input type="text" placeholder="Username" />
@@ -57,6 +72,7 @@ render() {
                  <br />
           </form>
         </div>
+      </div>
       </div>
     </div>
   );
