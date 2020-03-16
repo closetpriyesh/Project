@@ -3,56 +3,103 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const passport = require("passport");
 const path = require('path');
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require('mongoose-find-or-create');
+const findOrCreate = require('mongoose-findorcreate');
 
 require('./models/model.js').initialize();
 app.set('view engine', 'ejs');
+
 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
 app.use(bodyParser.json());
+// app.use(cors({origin: ['https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fgoogle%2Fyourquote&scope=profile&client_id=557384401247-2cis1mlh110b0hk351j8uri882fbhl4s.apps.googleusercontent.com','http://localhost:3000']}))
+app.use(cors());
+app.options("*",cors());
 
 
-app.use(cors({origin: 'http://localhost:3000'}))
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
 
-mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true , useUnifiedTopology:  true});
 
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.set("useCreateIndex", true);
 
 const userSchema = new mongoose.Schema({
   userName: String,
   password: String,
+  googleId: String,
+  secret: String
 });
 
-// userSchema.plugin(findOrCreate);
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
+
 const User = mongoose.model("UserRegistered", userSchema);
+passport.use(User.createStrategy());
 
 const postSchema = {
   title: String,
   content: String
 };
 
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/auth/google/yourquote",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log(profile);
+
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
 const Post = mongoose.model("Post", postSchema);
 
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.CLIENT_ID,
-//     clientSecret: process.env.CLIENT_SECRET,
-//     callbackURL: "http://www.example.com/auth/google/callback",
-//     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-//   },
-//   function(accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
+app.get("/auth/google",
+  passport.authenticate('google', { scope: ["profile"] })
+);
+
+app.get("/auth/google/yourquote",
+  passport.authenticate('google', { failureRedirect: "http://localhost:3000/" }),
+  function(req, res) {
+    console.log("authenticated");
+    res.redirect("http://localhost:3000/about");
+  });
 
 ///////////////////////////////////Requests Targetting all Posts////////////////////////
 

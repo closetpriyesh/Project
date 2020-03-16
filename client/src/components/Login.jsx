@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import Input from "./Input";
 import history from "../history";
-
-
+import GoogleService from '../services/GoogleService';
 class Login extends Component {
   constructor() {
   super();
   this.state = {
     customers: []
   };
+    this.googleService = new GoogleService();
     this.signUpClick = this.signUpClick.bind(this);
     this.signInClick = this.signInClick.bind(this);
-}
+  }
 
 signInClick(event) {
    history.push("/about");
@@ -48,13 +48,13 @@ render() {
 
           <div className="card">
             <div className="card-body">
-              <a className="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+              <a className="btn btn-block btn-social btn-google" href="http://localhost:5000/auth/google" role="button">
                 <i className="fab fa-google"></i>
                 Sign In with Google
               </a>
             </div>
           </div>
-      
+
         </div>
 
     <div className="row">
