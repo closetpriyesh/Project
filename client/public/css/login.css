@@ -1,14 +1,35 @@
 .card{
-text-align: center;
-display: block;
-width: 100%;
+    text-align: center;
+    display: block;
+    width: 100%;
+    background-color: #deddfa;
+    border:none;
+    margin: auto auto 0;
 }
-
+.btn-block {
+  width: 250px;
+}
 .card-body{
-  display: inline-block;
+  display:table;
+  margin: auto;
 }
 
+.container-fluid {
+padding: 0;
+}
 
 .row {
   padding: auto 0;
+}
+
+.col-md-8{
+    margin: auto;
+}
+
+.col-sm-6.login{
+    margin: auto;
+}
+
+.login-below {
+  overflow: hidden;
 }

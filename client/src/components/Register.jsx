@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import Input from "./Input";
+import UserService from '../services/UserService';
 function Register(props) {
+  const userService = new UserService();
+
   const [user, setUser] = useState({
-    userName: "",
+    username: "",
     password: "",
     confirmPassword: ""
   });
@@ -18,9 +21,9 @@ console.log(name+' '+value);
   });
  }
 
- function resetUser(userName) {
+ function resetUser(username) {
    setUser({
-     userName: userName,
+     username: username,
      password: "",
      confirmPassword: ""
    });
@@ -28,15 +31,11 @@ console.log(name+' '+value);
 
  function registerUser() {
    if(user.password === user.confirmPassword) {
-   props.onAdd({
-     userName: user.userName,
-     password: user.password,
-   });
-  resetUser("");
+     userService.createUser({username: user.username,password: user.password});
  }
  else {
 alert("Passwords do not match.");
-   resetUser(user.userName);
+   resetUser(user.username);
 }
 
  }
@@ -47,13 +46,11 @@ alert("Passwords do not match.");
   return (
     <div>
     <form className="signUpForm">
-      <Input type="text" name="userName" onChange={handleChange} value={user.userName} placeholder="Username"  />
+      <Input type="text" name="username" onChange={handleChange} value={user.username} placeholder="Username"  />
       <Input type="password" name="password" onChange={handleChange} value={user.password} placeholder="Password"  />
       <Input type="password" name="confirmPassword" onChange={handleChange} value={user.confirmPassword} placeholder="Confirm Password" />
       <button type="button" onClick={registerUser}>Register</button>
     </form>
-
-
     </div>
   );
 

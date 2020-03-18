@@ -1,36 +1,45 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Input from "./Input";
 import history from "../history";
-import GoogleService from '../services/GoogleService';
-class Login extends Component {
-  constructor() {
-  super();
-  this.state = {
-    customers: []
-  };
-    this.googleService = new GoogleService();
-    this.signUpClick = this.signUpClick.bind(this);
-    this.signInClick = this.signInClick.bind(this);
-  }
+import UserService from '../services/UserService';
+function Login() {
 
-signInClick(event) {
-   history.push("/about");
-   event.preventDefault();
+  const userService = new UserService();
+
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+
+function handleChange(event) {
+  const { name, value } = event.target;
+console.log(name+' '+value);
+  setUser(prevUser => {
+    return {
+      ...prevUser,
+      [name]: value
+    };
+  });
  }
 
- signUpClick(event) {
+ function resetUser(username) {
+   setUser({
+     username: username,
+     password: "",
+   });
+ }
+
+ function signInUser(event) {
+     userService.signInUser(user);
+     event.preventDefault();
+}
+
+function  signUpClick(event) {
     history.push("/register");
     event.preventDefault();
-  }
+}
 
 
- // componentDidMount() {
- //    fetch('/Posts')
- //      .then(res => res.json())
- //      .then(customers => this.setState({customers}, () => console.log('Customers fetched...', customers)));
- //  }
-
-render() {
   return (
     <div className="container-fluid">
       <div className="row">
@@ -43,7 +52,6 @@ render() {
         </div>
         <div className="col-sm-6 right">
 
-
         <div className="row">
 
           <div className="card">
@@ -53,30 +61,33 @@ render() {
                 Sign In with Google
               </a>
             </div>
+            <div className="card-body">
+              <a className="btn btn-block btn-social btn-facebook" href="http://localhost:5000/auth/facebook" role="button">
+                <i className="fab fa-facebook"></i>
+                Sign In with Facebook
+              </a>
+            </div>
           </div>
 
-        </div>
-
-    <div className="row">
           <form className="form">
-
-            <Input type="text" placeholder="Username" />
-            <Input type="password" placeholder="Password" />
-            <button type="submit" onClick={this.signInClick}>
+            <Input type="text" name="username" onChange={handleChange} value={user.username} placeholder="Username" />
+            <Input type="password" name="password" onChange={handleChange} value={user.password} placeholder="Password" />
+            <button type="submit" onClick={signInUser}>
               Login
             </button>
                  <br />
                  <p className="member">Not a member? <span className="pull-right">
                  <br />
-                 <button type="submit" className="btn btn-default btn-small signUp" onClick={this.signUpClick}>Sign Up</button></span></p>
+                 <button type="submit" className="btn btn-default btn-small signUp" onClick={signUpClick}>Sign Up</button></span></p>
                  <br />
           </form>
         </div>
+
       </div>
       </div>
     </div>
   );
-}
+
 }
 
 export default Login;

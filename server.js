@@ -10,6 +10,7 @@ const passport = require("passport");
 const path = require('path');
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
 
 require('./models/model.js').initialize();
@@ -45,7 +46,7 @@ mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewUrlParser: true, use
 mongoose.set("useCreateIndex", true);
 
 const userSchema = new mongoose.Schema({
-  userName: String,
+  username: String,
   password: String,
   googleId: String,
   secret: String
@@ -57,11 +58,6 @@ userSchema.plugin(findOrCreate);
 const User = mongoose.model("UserRegistered", userSchema);
 passport.use(User.createStrategy());
 
-const postSchema = {
-  title: String,
-  content: String
-};
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -71,6 +67,14 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+
+
+const postSchema = {
+  title: String,
+  content: String
+};
+
+
 
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
@@ -88,6 +92,8 @@ passport.use(new GoogleStrategy({
 ));
 
 
+
+
 const Post = mongoose.model("Post", postSchema);
 
 app.get("/auth/google",
@@ -98,7 +104,31 @@ app.get("/auth/google/yourquote",
   passport.authenticate('google', { failureRedirect: "http://localhost:3000/" }),
   function(req, res) {
     console.log("authenticated");
-    res.redirect("http://localhost:3000/about");
+    res.redirect("http://localhost:3000/admin");
+  });
+
+
+
+  passport.use(new FacebookStrategy({
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: "http://localhost:5000/auth/facebook/yourquote"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  ));
+
+  app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/yourquote',
+  passport.authenticate('facebook', { failureRedirect: "http://localhost:3000/" }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("http://localhost:3000/admin");
   });
 
 ///////////////////////////////////Requests Targetting all Posts////////////////////////
@@ -226,20 +256,16 @@ app.route("/users")
 
 .post(function(req, res){
 
-console.log("title: "+req.body.userName);
+console.log("title: "+req.body.username);
 console.log("content: "+req.body.password);
-
-  const newUser = new User({
-    userName: req.body.userName,
-    password: req.body.password,
-  });
-
-newUser.save(function(err, doc){
-    if (!err){
-        console.log("success");
-    return  res.send({redirect: "/"});
+User.register({username: req.body.username}, req.body.password, function(err, user){
+    if (err) {
+      console.log(err);
+      res.send({redirect:"http://localhost:3000/register");
     } else {
-      res.send(err);
+      passport.authenticate("local")(req, res, function(){
+        res.send({redirect:"http://localhost:3000/admin"});
+      });
     }
   });
 })
@@ -255,6 +281,28 @@ newUser.save(function(err, doc){
   });
 });
 
+////////////////////signin user////////////////////////
+
+app.post("/signin", function(req, res){
+
+  const username = req.body.username;
+  const password = req.body.password;
+  console.log(username);
+  User.findOne({username:username}, (err, foundUser) => {
+    if(err)
+    console.log(err);
+    else {
+      console.log(foundUser);
+      if(foundUser) {
+        if(foundUser.password === password) {
+          res.send({redirect:"http://localhost:3000/admin"});
+        }
+      }
+    }
+  })
+
+
+});
 
 
 const port = 5000;

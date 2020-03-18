@@ -79,6 +79,31 @@ class UserService {
       });
   }
 
+async signInUser(newUser) {
+  console.log("UserService.signInUser():");
+  console.log(JSON.stringify(newUser));
+  return fetch(this.config.USER_SIGN_IN_URL,  {
+    method: "POST",
+    mode: "cors",
+    headers: {
+          "Content-Type": "application/json"
+      },
+    body: JSON.stringify(newUser)
+  })
+  .then(response => {
+      console.log(response);
+      if (!response.ok) {
+          this.handleResponseError(response);
+      }
+
+      history.push('/admin');
+      // return response.json();
+    })
+    .catch(error => {
+      this.handleError(error);
+    });
+}
+
 
   async deleteUser(id) {
     console.log("UserService.deleteUser():");
